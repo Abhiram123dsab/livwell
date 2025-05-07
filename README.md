@@ -112,10 +112,3 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ├── tsconfig.json
 └── ...
 ```
-## Contributing
-
-[Explain how others can contribute to your project. Provide guidelines for pull requests, reporting issues, etc.]
-
-## License
-
-[Specify the license for your project, e.g., MIT, Apache 2.0, etc.]
