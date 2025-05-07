@@ -1,3 +1,5 @@
+import { PrismaClient } from '@prisma/client';
+
 export type User = {
   id: string
   name: string
@@ -68,7 +70,7 @@ export type CartItem = {
 export type Order = {
   id: string
   userId: string
-  items: CartItem[]
+  items: CartItem[] // Note: In Prisma, you'll fetch items related to an order
   total: number
   status: "pending" | "processing" | "delivered"
   paymentMethod: "cod" | "upi"
@@ -77,8 +79,8 @@ export type Order = {
   phone: string
 }
 
-// Mock users data
-export const users: User[] = [
+// Initialize Prisma Client
+const prisma = new PrismaClient();
   {
     id: "1",
     name: "John Doe",
@@ -92,8 +94,7 @@ export const users: User[] = [
     password: "password123",
   },
 ]
-
-// Mock fruits data
+  
 export const fruits: Fruit[] = [
   {
     id: "1",
@@ -150,8 +151,7 @@ export const fruits: Fruit[] = [
     color: "#f7b731",
   },
 ]
-
-// Mock juices data
+  
 export const juices: Juice[] = [
   {
     id: "1",
@@ -220,8 +220,7 @@ export const juices: Juice[] = [
     new: true,
   },
 ]
-
-// Mock dishes data
+  
 export const dishes: Dish[] = [
   {
     id: "1",

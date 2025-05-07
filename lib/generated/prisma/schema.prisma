@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider       = "prisma-client-js"
+  output         = "../lib/generated/prisma"
+  packageManager = "npm"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  name      String
+  email     String     @unique
+  password  String
+  address   String?
+  phone     String?
+  orders    Order[]
+  cartItems CartItem[]
+}
+
+model Fruit {
+  id    String @id @default(cuid())
+  name  String
+  image String
+  color String
+}
+
+model Juice {
+  id          String     @id @default(cuid())
+  name        String
+  description String
+  category    String
+  price       Float
+  ingredients String
+  benefits    String
+  featured    Boolean?   @default(false)
+  popular     Boolean?   @default(false)
+  new         Boolean?   @default(false)
+  cartItems   CartItem[]
+}
+
+model Dish {
+  id              String     @id @default(cuid())
+  name            String
+  description     String
+  category        String
+  price           Float
+  ingredients     String
+  nutritionalInfo Json
+  prepTime        Int
+  cookTime        Int
+  featured        Boolean?   @default(false)
+  popular         Boolean?   @default(false)
+  new             Boolean?   @default(false)
+  vegan           Boolean?   @default(false)
+  vegetarian      Boolean?   @default(false)
+  glutenFree      Boolean?   @default(false)
+  dairyFree       Boolean?   @default(false)
+  cartItems       CartItem[]
+}
+
+model CartItem {
+  id                String   @id @default(cuid())
+  juiceId           String?
+  dishId            String?
+  quantity          Int
+  customIngredients String
+  isCustom          Boolean? @default(false)
+  customName        String?
+  price             Float
+  userId            String
+  juice             Juice?   @relation(fields: [juiceId], references: [id])
+  dish              Dish?    @relation(fields: [dishId], references: [id])
+  user              User     @relation(fields: [userId], references: [id])
+  orderId           String?
+  order             Order?   @relation(fields: [orderId], references: [id])
+}
+
+model Order {
+  id            String     @id @default(cuid())
+  userId        String
+  total         Float
+  status        String
+  paymentMethod String
+  createdAt     DateTime   @default(now())
+  address       String
+  phone         String
+  user          User       @relation(fields: [userId], references: [id])
+  items         CartItem[]
+}
