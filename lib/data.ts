@@ -79,9 +79,22 @@ export type Order = {
   phone: string
 }
 
+const globalForPrisma = global as unknown as {
+  prisma: PrismaClient | undefined
+}
+
 // Initialize Prisma Client
-const prisma = new PrismaClient();
-  {
+export const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log: ['query', 'error', 'warn'],
+  })
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+
+// In-memory storage for users (for demonstration purposes)
+export const users: User[] = [
+ {
     id: "1",
     name: "John Doe",
     email: "john@example.com",
@@ -94,7 +107,6 @@ const prisma = new PrismaClient();
     password: "password123",
   },
 ]
-  
 export const fruits: Fruit[] = [
   {
     id: "1",
@@ -556,7 +568,7 @@ export const dishes: Dish[] = [
   },
 ]
 
-// In-memory storage for orders
+// In-memory storage for orders\
 export const orders: Order[] = []
 
 // In-memory storage for cart items
